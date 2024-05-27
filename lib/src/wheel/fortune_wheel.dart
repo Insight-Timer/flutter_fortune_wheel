@@ -194,7 +194,7 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
       }
 
       await Future.microtask(() => onAnimationStart?.call());
-      await rotateAnimCtrl.forward(from: 0);
+      //await rotateAnimCtrl.forward(from: 0);
       await Future.microtask(() => onAnimationEnd?.call());
     }
 
