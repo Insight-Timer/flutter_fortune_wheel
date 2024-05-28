@@ -188,18 +188,18 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
   Widget build(BuildContext context) {
     final rotateAnimCtrl = useAnimationController(duration: duration);
     final rotateAnim = CurvedAnimation(parent: rotateAnimCtrl, curve: curve);
-    // Future<void> animate() async {
-    //   if (rotateAnimCtrl.isAnimating) {
-    //     return;
-    //   }
+    Future<void> animate() async {
+      if (rotateAnimCtrl.isAnimating) {
+        return;
+      }
 
-    //   await Future.microtask(() => onAnimationStart?.call());
-    //   //await rotateAnimCtrl.forward(from: 0);
-    //   await Future.microtask(() => onAnimationEnd?.call());
-    // }
+      await Future.microtask(() => onAnimationStart?.call());
+      await rotateAnimCtrl.forward(from: 0);
+      await Future.microtask(() => onAnimationEnd?.call());
+    }
 
     useEffect(() {
-      //if (animateFirst) animate();
+      if (animateFirst) animate();
       return null;
     }, []);
 
@@ -208,7 +208,7 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
     useEffect(() {
       final subscription = selected.listen((event) {
         selectedIndex.value = event;
-        //animate();
+        animate();
       });
       return subscription.cancel;
     }, []);
