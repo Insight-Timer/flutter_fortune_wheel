@@ -46,6 +46,8 @@ class FortuneWheelPage extends HookWidget {
             SizedBox(height: 8),
             Expanded(
               child: FortuneWheel(
+                rotationCount: 1,
+                duration: const Duration(seconds: 1),
                 alignment: alignment.value,
                 selected: selected.stream,
                 onAnimationStart: () => isAnimating.value = true,
