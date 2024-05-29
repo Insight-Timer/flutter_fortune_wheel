@@ -19,8 +19,13 @@ class FortuneWheelPage extends HookWidget {
       appBar: AppBar(
         title: Text('Fortune Wheel Demo'),
       ),
-      body: Center(
-        child: _panGestureWidget(context),
+      body: Container(
+        transform: Matrix4.translationValues(
+          -(circleSize(context) / 2),
+          100,
+          0,
+        ),
+        child: _wheel(context),
       ),
     );
 
@@ -52,9 +57,7 @@ class FortuneWheelPage extends HookWidget {
     //final isAnimating = useState(false);
 
     void handleRoll() {
-      selected.add(
-        roll(Constants.emotions.length),
-      );
+      selected.add(roll(Constants.emotions.length));
     }
 
     return FortuneWheel(
@@ -107,50 +110,5 @@ class FortuneWheelPage extends HookWidget {
 
   double circleSize(BuildContext context) {
     return MediaQuery.of(context).size.width;
-  }
-
-  Widget _panGestureWidget(BuildContext context) {
-    return GestureDetector(
-      onPanUpdate: (d) {
-        _panHandler(d, context);
-      },
-      child: _wheel(context),
-    );
-  }
-
-  void _panHandler(DragUpdateDetails d, BuildContext context) {
-    final radius = circleSize(context) / 2;
-
-    /// Pan location on the wheel
-    bool onTop = d.localPosition.dy <= radius;
-    bool onLeftSide = d.localPosition.dx <= radius;
-    bool onRightSide = !onLeftSide;
-    bool onBottom = !onTop;
-
-    /// Pan movements
-    bool panUp = d.delta.dy <= 0.0;
-    bool panLeft = d.delta.dx <= 0.0;
-    bool panRight = !panLeft;
-    bool panDown = !panUp;
-
-    /// Absoulte change on axis
-    double yChange = d.delta.dy.abs();
-    double xChange = d.delta.dx.abs();
-
-    /// Directional change on wheel
-    double verticalRotation = (onRightSide && panDown) || (onLeftSide && panUp)
-        ? yChange
-        : yChange * -1;
-
-    double horizontalRotation =
-        (onTop && panRight) || (onBottom && panLeft) ? xChange : xChange * -1;
-
-    // Total computed change
-    double rotationalChange = verticalRotation + horizontalRotation;
-
-    bool movingClockwise = rotationalChange > 0;
-    bool movingCounterClockwise = rotationalChange < 0;
-
-    // Now do something interesting with these computations!
   }
 }

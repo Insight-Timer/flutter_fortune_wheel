@@ -241,16 +241,19 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
                 animation: rotateAnim,
                 builder: (context, _) {
                   final size = MediaQuery.of(context).size;
+                  print("==== size -> $size");
                   final meanSize = (size.width + size.height) / 2;
                   final panFactor = 6 / meanSize;
 
                   return LayoutBuilder(builder: (context, constraints) {
-                    var panDistance = panState.distance;
-                    // if (panState.isPanning == false) {
-                    //   panDistance = 0;
-                    // }
+                    print("===== constraints -> $constraints");
+                    print("===== circleSize -> $circleSize");
+                    final panDistance = panState.distance;
                     final wheelData = _WheelData(
-                      constraints: constraints,
+                      constraints: BoxConstraints(
+                        maxWidth: circleSize,
+                        maxHeight: circleSize,
+                      ),
                       itemCount: items.length,
                       textDirection: Directionality.of(context),
                     );
@@ -313,10 +316,23 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
                     );
                   });
                 }),
-            for (var it in indicators)
-              IgnorePointer(
-                child: _WheelIndicator(indicator: it),
+            Positioned(
+              right: 0,
+              top: (circleSize / 2) - 18,
+              child: IgnorePointer(
+                child: _WheelIndicator(
+                  indicator: indicators.first,
+                  size: circleSize,
+                ),
               ),
+            ),
+            // for (var it in indicators)
+            //   IgnorePointer(
+            //     child: _WheelIndicator(
+            //       indicator: it,
+            //       size: circleSize,
+            //     ),
+            //   ),
           ],
         );
       },

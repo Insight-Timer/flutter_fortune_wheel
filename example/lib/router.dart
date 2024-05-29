@@ -8,9 +8,5 @@ final router = GoRouter(
         path: '/',
         builder: (context, state) => FortuneWheelPage(),
         name: FortuneWheelPage.kRouteName),
-    GoRoute(
-        path: '/bar',
-        builder: (context, state) => FortuneBarPage(),
-        name: FortuneBarPage.kRouteName),
   ],
 );

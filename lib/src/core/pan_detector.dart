@@ -348,31 +348,32 @@ class PanAwareBuilder extends HookWidget {
       }
     });
 
-    return LayoutBuilder(builder: (context, constraints) {
-      physics.size = Size(constraints.maxWidth, constraints.maxHeight);
+    // return LayoutBuilder(builder: (context, constraints) {
+    //   print("===== physics.size -> ${physics.size}");
+    //   physics.size = Size(constraints.maxWidth, constraints.maxHeight);
 
-      return GestureDetector(
-        behavior: behavior,
-        onPanStart: physics.handlePanStart,
-        onPanUpdate: physics.handlePanUpdate,
-        onPanEnd: physics.handlePanEnd,
-        child: AnimatedBuilder(
-            animation: returnAnim,
-            builder: (context, _) {
-              final mustApplyEasing = returnAnimCtrl.isAnimating ||
-                  returnAnimCtrl.status == AnimationStatus.completed;
+    return GestureDetector(
+      behavior: behavior,
+      onPanStart: physics.handlePanStart,
+      onPanUpdate: physics.handlePanUpdate,
+      onPanEnd: physics.handlePanEnd,
+      child: AnimatedBuilder(
+          animation: returnAnim,
+          builder: (context, _) {
+            final mustApplyEasing = returnAnimCtrl.isAnimating ||
+                returnAnimCtrl.status == AnimationStatus.completed;
 
-              if (mustApplyEasing) {
-                panState = panState.copyWith(
-                  distance: panState.distance * (1 - returnAnim.value),
-                );
-              }
-
-              return Builder(
-                builder: (context) => builder(context, panState),
+            if (mustApplyEasing) {
+              panState = panState.copyWith(
+                distance: panState.distance * (1 - returnAnim.value),
               );
-            }),
-      );
-    });
+            }
+
+            return Builder(
+              builder: (context) => builder(context, panState),
+            );
+          }),
+    );
+    //});
   }
 }

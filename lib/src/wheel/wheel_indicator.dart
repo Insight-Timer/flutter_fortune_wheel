@@ -48,32 +48,37 @@ double _getAngle(Alignment alignment) {
 }
 
 class _WheelIndicator extends StatelessWidget {
+  final double size;
   final FortuneIndicator indicator;
 
   const _WheelIndicator({
     Key? key,
+    required this.size,
     required this.indicator,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final margins = getCenteredMargins(constraints);
-        final offset = _getOffset(indicator.alignment, margins);
-        final angle = _getAngle(indicator.alignment);
+    return LayoutBuilder(builder: (context, constraints) {
+      final margins = getCenteredMargins(BoxConstraints(
+        maxWidth: size,
+        maxHeight: size,
+      ));
+      print("====== margins -> $margins");
+      final offset = _getOffset(indicator.alignment, margins);
+      final angle = _getAngle(indicator.alignment);
+      print("==== offset wheel indicator -> $offset");
 
-        return Align(
-          alignment: indicator.alignment,
-          child: Transform.translate(
-            offset: offset,
-            child: Transform.rotate(
-              angle: angle,
-              child: indicator.child,
-            ),
+      return Align(
+        alignment: Alignment.centerRight,
+        child: Transform.translate(
+          offset: offset,
+          child: Transform.rotate(
+            angle: angle,
+            child: indicator.child,
           ),
-        );
-      },
-    );
+        ),
+      );
+    });
   }
 }
