@@ -9,6 +9,8 @@ part of 'core.dart';
 class FortuneItem implements GestureHandler {
   final FortuneItemStyle? style;
 
+  final bool isSelected;
+
   /// A widget to be rendered within this item.
   final Widget child;
 
@@ -155,6 +157,7 @@ class FortuneItem implements GestureHandler {
     required this.child,
     this.onTap,
     this.onTapUp,
+    this.isSelected = false,
     this.onDoubleTap,
     this.onDoubleTapCancel,
     this.onDoubleTapDown,
@@ -380,4 +383,7 @@ class TransformedFortuneItem implements FortuneItem {
   @override
   GestureDragUpdateCallback? get onVerticalDragUpdate =>
       _item.onVerticalDragUpdate;
+
+  @override
+  bool get isSelected => _item.isSelected;
 }

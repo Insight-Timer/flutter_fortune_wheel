@@ -305,11 +305,15 @@ class PanAwareBuilder extends HookWidget {
   /// The callback to be called whenever a fling/swipe gesture is detected.
   final VoidCallback? onFling;
 
+  /// The callback to be called whenever a fling/swipe gesture is detected.
+  final Function(PanState panState)? onPanChanged;
+
   PanAwareBuilder({
     required this.builder,
     required this.physics,
     this.behavior,
     this.onFling,
+    this.onPanChanged,
   });
 
   @override
@@ -323,11 +327,17 @@ class PanAwareBuilder extends HookWidget {
 
     useValueChanged<bool, Future<void>>(
       panState.isPanning,
-      (oldValue, _) async {
+      (oldValue, value) async {
+        //print("===== is panning called -> $panState");
         if (!oldValue) {
+          // print("===== reset called");
           returnAnimCtrl.reset();
         } else {
-          await returnAnimCtrl.forward(from: 0.0);
+          print("===== PAN STOPPED -> Move to new position");
+          await Future.microtask(() => onPanChanged?.call(panState));
+          print("===== animate begin");
+          await returnAnimCtrl.forward(from: 1); //0.0
+          print("===== animate end");
         }
       },
     );
