@@ -75,6 +75,9 @@ class FortuneWheelPage extends HookWidget {
         FortuneIndicator(
           alignment: Alignment.centerRight,
           child: TriangleIndicator(
+            width: 16,
+            height: 16,
+            elevation: 5,
             color: Colors.amber,
           ),
         )

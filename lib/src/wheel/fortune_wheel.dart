@@ -318,7 +318,7 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
                 }),
             Positioned(
               right: 0,
-              top: (circleSize / 2) - 18,
+              top: (circleSize / 2) - 8,
               child: IgnorePointer(
                 child: _WheelIndicator(
                   indicator: indicators.first,
