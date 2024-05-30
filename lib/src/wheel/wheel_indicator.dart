@@ -64,10 +64,8 @@ class _WheelIndicator extends StatelessWidget {
         maxWidth: size,
         maxHeight: size,
       ));
-      print("====== margins -> $margins");
       final offset = _getOffset(indicator.alignment, margins);
       final angle = _getAngle(indicator.alignment);
-      print("==== offset wheel indicator -> $offset");
 
       return Align(
         alignment: Alignment.centerRight,

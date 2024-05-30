@@ -328,9 +328,7 @@ class PanAwareBuilder extends HookWidget {
     useValueChanged<bool, Future<void>>(
       panState.isPanning,
       (oldValue, value) async {
-        //print("===== is panning called -> $panState");
         if (!oldValue) {
-          // print("===== reset called");
           returnAnimCtrl.reset();
         } else {
           print("===== PAN STOPPED -> Move to new position");
@@ -349,7 +347,6 @@ class PanAwareBuilder extends HookWidget {
     });
 
     // return LayoutBuilder(builder: (context, constraints) {
-    //   print("===== physics.size -> ${physics.size}");
     //   physics.size = Size(constraints.maxWidth, constraints.maxHeight);
 
     return GestureDetector(

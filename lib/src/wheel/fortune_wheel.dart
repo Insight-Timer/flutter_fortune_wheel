@@ -227,27 +227,21 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
       onFling: onFling,
       onPanChanged: (panState) {
         if (lastFocusedIndex != null) {
-          print("==== UPDATE NEW SELECTED POSITION  -> ${lastFocusedIndex} ");
+          //print("==== UPDATE NEW SELECTED POSITION  -> ${lastFocusedIndex} ");
           selectedIndex.value = lastFocusedIndex;
         }
-
-        //animate();
       },
       builder: (context, panState) {
-        print("===== panState -> $panState");
         return Stack(
           children: [
             AnimatedBuilder(
                 animation: rotateAnim,
                 builder: (context, _) {
                   final size = MediaQuery.of(context).size;
-                  print("==== size -> $size");
                   final meanSize = (size.width + size.height) / 2;
                   final panFactor = 6 / meanSize;
 
                   return LayoutBuilder(builder: (context, constraints) {
-                    print("===== constraints -> $constraints");
-                    print("===== circleSize -> $circleSize");
                     final panDistance = panState.distance;
                     final wheelData = _WheelData(
                       constraints: BoxConstraints(
@@ -260,15 +254,11 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
 
                     final isAnimatingPanFactor =
                         rotateAnimCtrl.isAnimating ? 0 : 1;
-                    print(
-                        "===== selectedIndex.value -> ${selectedIndex.value}");
-                    print("======= panState.distance -> ${panDistance}");
                     final selectedAngle =
                         -2 * _math.pi * (selectedIndex.value / items.length);
                     final panAngle =
                         panDistance * panFactor * isAnimatingPanFactor;
                     final rotationAngle = _getAngle(rotateAnim.value);
-                    // print("=== rotationAngle -> $rotationAngle");
                     final totalAngle = selectedAngle + panAngle + rotationAngle;
 
                     final focusedIndex = _vibrateIfBorderCrossed(
@@ -280,9 +270,7 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
 
                     if (focusedIndex != null) {
                       final index = focusedIndex % items.length;
-                      print("====== Focused index -> $index");
                       lastFocusedIndex = index;
-                      //selectedIndex.value = index;
                       onFocusItemChanged?.call(focusedIndex % items.length);
                     }
 
@@ -316,16 +304,17 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
                     );
                   });
                 }),
-            Positioned(
-              right: 0,
-              top: (circleSize / 2) - 8,
-              child: IgnorePointer(
-                child: _WheelIndicator(
-                  indicator: indicators.first,
-                  size: circleSize,
+            if (indicators.isNotEmpty)
+              Positioned(
+                right: 0,
+                top: (circleSize / 2) - 8,
+                child: IgnorePointer(
+                  child: _WheelIndicator(
+                    indicator: indicators.first,
+                    size: circleSize,
+                  ),
                 ),
               ),
-            ),
             // for (var it in indicators)
             //   IgnorePointer(
             //     child: _WheelIndicator(
@@ -338,28 +327,6 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
       },
     );
   }
-
-  /*int? _getFocusedPosition(
-    PanState panState,
-    ObjectRef<double> lastVibratedAngle,
-  ) {
-    final rotateAnimCtrl = useAnimationController(duration: duration);
-    final isAnimatingPanFactor = rotateAnimCtrl.isAnimating ? 0 : 1;
-    final selectedAngle = -2 * _math.pi * (selectedIndex.value / items.length);
-    final panAngle = panState.distance * panFactor * isAnimatingPanFactor;
-    //print("==== panState.distance -> ${panState.distance}");
-    final rotationAngle = _getAngle(rotateAnim.value);
-    //print("===== rotationAngle -> $rotationAngle");
-    final totalAngle = selectedAngle + panAngle + rotationAngle;
-
-    final focusedIndex = _vibrateIfBorderCrossed(
-      totalAngle,
-      lastVibratedAngle,
-      items.length,
-      hapticImpact,
-    );
-    return focusedIndex;
-  }*/
 
   int? _vibrateIfBorderCrossed(
     double angle,

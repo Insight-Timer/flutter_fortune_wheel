@@ -19,36 +19,29 @@ class FortuneWheelPage extends HookWidget {
       appBar: AppBar(
         title: Text('Fortune Wheel Demo'),
       ),
-      body: Container(
-        transform: Matrix4.translationValues(
-          -(circleSize(context) / 2),
-          100,
-          0,
-        ),
-        child: _wheel(context),
+      body: Stack(
+        children: [
+          Container(
+            transform: Matrix4.translationValues(
+              -(circleSize(context) / 2),
+              200,
+              0,
+            ),
+            child: _wheel(context),
+          ),
+          Positioned(
+            top: 200 + (circleSize(context) / 2),
+            child: Transform.rotate(
+              alignment: Alignment.topLeft,
+              angle: -0.22,
+              child: CustomPaint(
+                painter: PeacefulSlicePainter(),
+              ),
+            ),
+          ),
+        ],
       ),
     );
-
-    /*return AppLayout(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            //alignmentSelector,
-            SizedBox(height: 8),
-            RollButtonWithPreview(
-              selected: selectedIndex,
-              items: Constants.emotions.map((e) => e.name).toList(),
-              onPressed: isAnimating.value ? null : handleRoll,
-            ),
-            SizedBox(height: 8),
-            // Expanded(
-            //   child: ,
-            // ),
-          ],
-        ),
-      ),
-    );*/
   }
 
   Widget _wheel(BuildContext context) {
@@ -64,7 +57,7 @@ class FortuneWheelPage extends HookWidget {
       circleSize: circleSize(context),
       rotationCount: 1,
       curve: FortuneCurve.spin,
-      duration: const Duration(seconds: 1),
+      duration: Duration(seconds: 2),
       alignment: Alignment.centerRight,
       selected: selected.stream,
       // onAnimationStart: () => isAnimating.value = true,
@@ -72,15 +65,15 @@ class FortuneWheelPage extends HookWidget {
       onFling: handleRoll,
       hapticImpact: HapticImpact.heavy,
       indicators: [
-        FortuneIndicator(
-          alignment: Alignment.centerRight,
-          child: TriangleIndicator(
-            width: 16,
-            height: 16,
-            elevation: 5,
-            color: Colors.amber,
-          ),
-        )
+        // FortuneIndicator(
+        //   alignment: Alignment.centerRight,
+        //   child: TriangleIndicator(
+        //     width: 16,
+        //     height: 16,
+        //     elevation: 5,
+        //     color: Colors.amber,
+        //   ),
+        // )
       ],
       items: [
         for (var eachEmotion in Constants.emotions)
@@ -113,5 +106,35 @@ class FortuneWheelPage extends HookWidget {
 
   double circleSize(BuildContext context) {
     return MediaQuery.of(context).size.width;
+  }
+}
+
+class PeacefulSlicePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final path = Path()
+      ..moveTo(0, 0)
+      ..lineTo(215, 0)
+      ..arcTo(
+          Rect.fromCircle(
+            center: Offset(0, 0),
+            radius: 215,
+          ),
+          0,
+          0.4487989505128276,
+          false)
+      ..close();
+    canvas.drawPath(
+      path,
+      Paint()
+        ..strokeWidth = 2
+        ..color = Colors.white
+        ..style = PaintingStyle.stroke,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
   }
 }

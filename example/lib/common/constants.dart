@@ -11,6 +11,7 @@ class Emotions {
   });
 }
 
+// ignore: avoid_classes_with_only_static_members
 class Constants {
   // static List<String> get fortuneValues => const <String>[
   //       'Grogu-0',
@@ -25,32 +26,14 @@ class Constants {
   //       'Ahsoka Tano-8',
   //     ];
 
-  static List<Emotions> emotions = [
-    Emotions(name: 'Emotion0', color: Colors.red),
-    Emotions(name: 'Emotion1', color: Colors.green),
-    Emotions(name: 'Emotion2', color: Colors.blue),
-    Emotions(name: 'Emotion3', color: Colors.yellow),
-    Emotions(name: 'Emotion4', color: Colors.orange),
-    Emotions(name: 'Emotion5', color: Colors.brown),
-    Emotions(name: 'Emotion6', color: Colors.purple),
-    Emotions(name: 'Emotion7', color: Colors.lightBlue),
-    Emotions(name: 'Emotion8', color: Colors.pink),
-    Emotions(name: 'Emotion9', color: Colors.lightGreen),
-    Emotions(name: 'Emotion10', color: Colors.teal),
-    Emotions(name: 'Emotion11', color: Colors.lime),
-    Emotions(name: 'Emotion12', color: Colors.indigo),
-    // Emotions(name: 'Emotion13', color: Colors.red),
-    // Emotions(name: 'Emotion14', color: Colors.green),
-    // Emotions(name: 'Emotion15', color: Colors.blue),
-    // Emotions(name: 'Emotion16', color: Colors.yellow),
-    // Emotions(name: 'Emotion17', color: Colors.orange),
-    // Emotions(name: 'Emotion18', color: Colors.brown),
-    // Emotions(name: 'Emotion19', color: Colors.purple),
-    // Emotions(name: 'Emotion20', color: Colors.lightBlue),
-    // Emotions(name: 'Emotion21', color: Colors.pink),
-    // Emotions(name: 'Emotion22', color: Colors.lightGreen),
-    // Emotions(name: 'Emotion23', color: Colors.teal),
-    // Emotions(name: 'Emotion24', color: Colors.lime),
-    // Emotions(name: 'Emotion25', color: Colors.indigo),
+  static List<Emotions> emotions = _emotions + _emotions;
+  static final List<Emotions> _emotions = [
+    Emotions(name: 'Angry', color: Color(0xFFF94144)),
+    Emotions(name: 'Fearful', color: Color(0xFFF37226)),
+    Emotions(name: 'Surprised', color: Color(0xFFF8961E)),
+    Emotions(name: 'Happy', color: Color(0xFFF9C747)),
+    Emotions(name: 'Peaceful', color: Color(0xFFF90BE6D)),
+    Emotions(name: 'Bad', color: Color(0xFF43AA8B)),
+    Emotions(name: 'Sad', color: Color(0xFF577590)),
   ];
 }

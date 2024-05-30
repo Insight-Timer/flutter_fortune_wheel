@@ -42,7 +42,7 @@ class _CircleSlice extends StatelessWidget {
           angle: angle,
           fillColor: fillColor,
           strokeColor: strokeColor,
-          strokeWidth: strokeWidth,
+          strokeWidth: 0,
         ),
       ),
     );
