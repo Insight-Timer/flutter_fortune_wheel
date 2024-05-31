@@ -29,7 +29,7 @@ class FortuneWheelPage extends HookWidget {
             ),
             child: _wheel(context),
           ),
-          Positioned(
+          /*Positioned(
             top: 200 + (circleSize(context) / 2),
             child: Transform.rotate(
               alignment: Alignment.topLeft,
@@ -38,7 +38,7 @@ class FortuneWheelPage extends HookWidget {
                 painter: PeacefulSlicePainter(),
               ),
             ),
-          ),
+          ),*/
         ],
       ),
     );
