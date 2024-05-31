@@ -251,14 +251,16 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
                       itemCount: items.length,
                       textDirection: Directionality.of(context),
                     );
+                    final selectedIndexValue = selectedIndex.value;
 
                     final isAnimatingPanFactor =
                         rotateAnimCtrl.isAnimating ? 0 : 1;
                     final selectedAngle =
-                        -2 * _math.pi * (selectedIndex.value / items.length);
+                        -2 * _math.pi * (selectedIndexValue / items.length);
                     final panAngle =
                         panDistance * panFactor * isAnimatingPanFactor;
-                    final rotationAngle = _getAngle(rotateAnim.value);
+                    //Made the angle value /2 - to make rotation round smaller and should rotate to next coming value.
+                    final rotationAngle = _getAngle(rotateAnim.value / 2);
                     final totalAngle = selectedAngle + panAngle + rotationAngle;
 
                     final focusedIndex = _vibrateIfBorderCrossed(
@@ -281,6 +283,26 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
                       e,
                     ) {
                       index += 1;
+                      final angle = totalAngle +
+                          alignmentOffset +
+                          _calculateSliceAngle(index, items.length);
+                      // print(
+                      //     "===== index ${index} ${(items[index].child as Text).data} - Angle -> $angle    ");
+
+                      // return TransformedFortuneItem(
+                      //   item: FortuneItem(
+                      //       child: Text(
+                      //         angle.toString(),
+                      //       ),
+                      //       style: FortuneItemStyle(
+                      //         color: e.style!.color,
+                      //         textStyle: TextStyle(fontSize: 12),
+                      //       ),
+                      //       onTap: e.onTap),
+                      //   angle: angle,
+                      //   offset: wheelData.offset,
+                      // );
+
                       return TransformedFortuneItem(
                         item: selectedIndex.value == index
                             ? FortuneItem(
@@ -288,9 +310,7 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
                                 style: e.style,
                                 isSelected: true)
                             : e,
-                        angle: totalAngle +
-                            alignmentOffset +
-                            _calculateSliceAngle(index, items.length),
+                        angle: angle,
                         offset: wheelData.offset,
                       );
                     }).toList();
