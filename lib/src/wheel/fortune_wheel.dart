@@ -219,7 +219,7 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
 
     final lastVibratedAngle = useRef<double>(0);
 
-    var lastFocusedIndex;
+    var lastFocusedIndex = selectedIndex.value;
 
     return PanAwareBuilder(
       behavior: HitTestBehavior.translucent,
@@ -273,7 +273,7 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
                     if (focusedIndex != null) {
                       final index = focusedIndex % items.length;
                       lastFocusedIndex = index;
-                      onFocusItemChanged?.call(focusedIndex % items.length);
+                      onFocusItemChanged?.call(index);
                     }
 
                     final alignmentOffset =
@@ -304,7 +304,7 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
                       // );
 
                       return TransformedFortuneItem(
-                        item: selectedIndex.value == index
+                        item: lastFocusedIndex /*selectedIndex.value*/ == index
                             ? FortuneItem(
                                 child: e.child,
                                 style: e.style,

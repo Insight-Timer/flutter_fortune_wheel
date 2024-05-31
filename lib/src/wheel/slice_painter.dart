@@ -7,18 +7,21 @@ class _CircleSlicePainter extends CustomPainter {
   final Color? strokeColor;
   final double strokeWidth;
   final double angle;
+  final bool isHighlighted;
 
   const _CircleSlicePainter({
     required this.fillColor,
     this.strokeColor,
     this.strokeWidth = 1,
+    this.isHighlighted = false,
     this.angle = _math.pi / 2,
   }) : assert(angle > 0 && angle < 2 * _math.pi);
 
   @override
   void paint(Canvas canvas, Size size) {
     final radius = _math.min(size.width, size.height);
-    final path = _CircleSlice.buildSlicePath(radius, angle);
+    final path =
+        _CircleSlice.buildSlicePath(isHighlighted ? radius : radius - 5, angle);
 
     // fill slice area
     canvas.drawPath(
