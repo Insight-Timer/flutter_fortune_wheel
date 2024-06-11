@@ -5,6 +5,7 @@ class _TransformedCircleSlice extends StatelessWidget {
   final StyleStrategy styleStrategy;
   final _WheelData wheelData;
   final int index;
+  final bool isBigCircle;
 
   const _TransformedCircleSlice({
     Key? key,
@@ -12,6 +13,7 @@ class _TransformedCircleSlice extends StatelessWidget {
     required this.styleStrategy,
     required this.index,
     required this.wheelData,
+    required this.isBigCircle,
   }) : super(key: key);
 
   @override
@@ -27,7 +29,8 @@ class _TransformedCircleSlice extends StatelessWidget {
         child: item.child,
       ),
       slice: _CircleSlice(
-        radius: wheelData.radius,
+        radius: isBigCircle ? wheelData.radius * 3 : wheelData.radius,
+        isBigCircle: isBigCircle,
         angle: wheelData.itemAngle,
         fillColor: style.color,
         strokeColor: style.borderColor,
@@ -42,12 +45,14 @@ class _CircleSlices extends StatelessWidget {
   final List<TransformedFortuneItem> items;
   final StyleStrategy styleStrategy;
   final _WheelData wheelData;
+  final bool isBigCircle;
 
   const _CircleSlices({
     Key? key,
     required this.items,
     required this.styleStrategy,
     required this.wheelData,
+    required this.isBigCircle,
   }) : super(key: key);
 
   @override
@@ -60,6 +65,7 @@ class _CircleSlices extends StatelessWidget {
             alignment: Alignment.topLeft,
             angle: items[i].angle,
             child: _TransformedCircleSlice(
+              isBigCircle: isBigCircle,
               item: items[i],
               styleStrategy: styleStrategy,
               index: i,

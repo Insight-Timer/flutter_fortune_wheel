@@ -8,35 +8,52 @@ class _CircleSlicePainter extends CustomPainter {
   final double strokeWidth;
   final double angle;
   final bool isHighlighted;
+  final bool isBigCircle;
 
   const _CircleSlicePainter({
     required this.fillColor,
     this.strokeColor,
     this.strokeWidth = 1,
     this.isHighlighted = false,
+    required this.isBigCircle,
     this.angle = _math.pi / 2,
   }) : assert(angle > 0 && angle < 2 * _math.pi);
 
   @override
   void paint(Canvas canvas, Size size) {
-    final radius = _math.min(size.width, size.height);
-    final path =
-        _CircleSlice.buildSlicePath(isHighlighted ? radius : radius - 5, angle);
+    final radius = isBigCircle
+        ? _math.max(size.width, size.height)
+        : _math.min(size.width, size.height);
+    final path = isBigCircle
+        ? _CircleSlice.buildSlicePath(radius, angle)
+        : _CircleSlice.buildSlicePath(
+            isHighlighted ? radius : radius - 5, angle);
+
+    final gradient = LinearGradient(
+      colors: [Color(0xFF709A4F), Color(0xFF91BE6D)],
+      stops: [0.7, 1.0],
+      begin: Alignment.centerLeft,
+      end: Alignment.centerRight,
+    );
+
+    final paint = Paint()
+      ..color = isBigCircle ? Colors.white : fillColor //Color(0xFF709A4F)
+      ..style = PaintingStyle.fill;
+
+    if (!isHighlighted && isBigCircle) {
+      paint.shader =
+          gradient.createShader(Rect.fromLTWH(0, 0, size.width, size.height));
+    }
 
     // fill slice area
-    canvas.drawPath(
-      path,
-      Paint()
-        ..color = fillColor
-        ..style = PaintingStyle.fill,
-    );
+    canvas.drawPath(path, paint);
 
     // draw slice border
     if (strokeWidth > 0) {
       canvas.drawPath(
         path,
         Paint()
-          ..color = strokeColor!
+          ..color = Colors.white
           ..strokeWidth = strokeWidth
           ..style = PaintingStyle.stroke,
       );

@@ -47,9 +47,9 @@ class _ExamplePageState extends State<ExamplePage> {
     ];
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Flutter Fortune Wheel'),
-      ),
+      // appBar: AppBar(
+      //   title: Text('Flutter Fortune Wheel'),
+      // ),
       body: GestureDetector(
         onTap: () {
           setState(() {

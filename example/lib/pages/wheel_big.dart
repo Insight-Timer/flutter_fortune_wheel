@@ -6,8 +6,10 @@ import 'package:go_router/go_router.dart';
 import '../common/common.dart';
 import '../widgets/widgets.dart';
 
-class FortuneWheelPage extends HookWidget {
-  static const kRouteName = 'FortuneWheelPage';
+class FortuneWheelBigPage extends HookWidget {
+  static const kRouteName = 'FortuneWheelBigPage';
+
+  var onFocusIndex = 0;
 
   static void go(BuildContext context) {
     context.goNamed(kRouteName);
@@ -16,32 +18,35 @@ class FortuneWheelPage extends HookWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Fortune Wheel Demo'),
-      ),
+      // appBar: AppBar(
+      //   title: Text('Fortune Wheel Demo'),
+      // ),
       body: Stack(
         children: [
           Container(
             transform: Matrix4.translationValues(
               -(circleSize(context) / 2),
-              200,
+              250,
               0,
             ),
             child: _wheel(context),
           ),
-          /*Positioned(
-            top: 200 + (circleSize(context) / 2),
-            child: Transform.rotate(
-              alignment: Alignment.topLeft,
-              angle: -0.22,
-              child: CustomPaint(
-                painter: PeacefulSlicePainter(),
-              ),
-            ),
-          ),*/
         ],
       ),
     );
+  }
+
+  List<Emotions> get emotions {
+    List<Emotions> newEmotions = [];
+    for (var element in Constants.feelings) {
+      newEmotions.add(
+        Emotions(
+          name: element.name,
+          color: Color(0xFF709A4F),
+        ),
+      );
+    }
+    return newEmotions;
   }
 
   Widget _wheel(BuildContext context) {
@@ -50,10 +55,11 @@ class FortuneWheelPage extends HookWidget {
     //final isAnimating = useState(false);
 
     void handleRoll() {
-      selected.add(roll(Constants.emotions.length));
+      selected.add(roll(emotions.length));
     }
 
     return FortuneWheel(
+      isBig: true,
       circleSize: circleSize(context),
       rotationCount: 1,
       curve: FortuneCurve.spin,
@@ -63,6 +69,10 @@ class FortuneWheelPage extends HookWidget {
       // onAnimationStart: () => isAnimating.value = true,
       // onAnimationEnd: () => isAnimating.value = false,
       onFling: handleRoll,
+      onFocusItemChanged: (index) {
+        print("===== $index");
+        onFocusIndex = index;
+      },
       hapticImpact: HapticImpact.heavy,
       indicators: [
         // FortuneIndicator(
@@ -76,7 +86,7 @@ class FortuneWheelPage extends HookWidget {
         // )
       ],
       items: [
-        for (var eachEmotion in Constants.emotions)
+        for (var eachEmotion in emotions)
           FortuneItem(
             style: FortuneItemStyle(
               color: eachEmotion.color,
@@ -88,7 +98,7 @@ class FortuneWheelPage extends HookWidget {
               ),
             ),
             onTap: () {
-              final indexSelected = Constants.emotions
+              final indexSelected = emotions
                   .indexWhere((element) => element.name == eachEmotion.name);
               print(
                   "==== on option tap -> ${eachEmotion.name} ${indexSelected}");
@@ -98,7 +108,13 @@ class FortuneWheelPage extends HookWidget {
               alignment: Alignment.centerRight,
               child: Padding(
                 padding: const EdgeInsets.only(right: 20.0),
-                child: Text(eachEmotion.name),
+                child: Container(
+                  width: 100,
+                  child: Text(
+                    eachEmotion.name,
+                    textAlign: TextAlign.left,
+                  ),
+                ),
               ),
             ),
           ),
@@ -108,35 +124,5 @@ class FortuneWheelPage extends HookWidget {
 
   double circleSize(BuildContext context) {
     return MediaQuery.of(context).size.width;
-  }
-}
-
-class PeacefulSlicePainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final path = Path()
-      ..moveTo(0, 0)
-      ..lineTo(215, 0)
-      ..arcTo(
-          Rect.fromCircle(
-            center: Offset(0, 0),
-            radius: 215,
-          ),
-          0,
-          0.4487989505128276,
-          false)
-      ..close();
-    canvas.drawPath(
-      path,
-      Paint()
-        ..strokeWidth = 2
-        ..color = Colors.white
-        ..style = PaintingStyle.stroke,
-    );
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return false;
   }
 }

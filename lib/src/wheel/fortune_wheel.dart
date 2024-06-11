@@ -100,6 +100,8 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
 
   static const StyleStrategy kDefaultStyleStrategy = AlternatingStyleStrategy();
 
+  final bool isBig;
+
   /// {@macro flutter_fortune_wheel.FortuneWidget.items}
   final double circleSize;
 
@@ -169,6 +171,7 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
   FortuneWheel({
     Key? key,
     required this.items,
+    this.isBig = false,
     this.circleSize = 300.0,
     this.rotationCount = FortuneWidget.kDefaultRotationCount,
     this.selected = const Stream<int>.empty(),
@@ -307,7 +310,16 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
                         item: lastFocusedIndex /*selectedIndex.value*/ == index
                             ? FortuneItem(
                                 child: e.child,
-                                style: e.style,
+                                style: isBig
+                                    ? FortuneItemStyle(
+                                        color: Colors.white,
+                                        textStyle: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      )
+                                    : e.style,
                                 isSelected: true)
                             : e,
                         angle: angle,
@@ -317,6 +329,7 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
 
                     return SizedBox.expand(
                       child: _CircleSlices(
+                        isBigCircle: isBig,
                         items: transformedItems,
                         wheelData: wheelData,
                         styleStrategy: styleStrategy,

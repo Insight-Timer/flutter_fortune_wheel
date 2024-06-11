@@ -2,6 +2,7 @@ part of 'wheel.dart';
 
 class _CircleSlice extends StatelessWidget {
   static Path buildSlicePath(double radius, double angle) {
+    print("=== radius -> $radius");
     return Path()
       ..moveTo(0, 0)
       ..lineTo(radius, 0)
@@ -22,9 +23,11 @@ class _CircleSlice extends StatelessWidget {
   final Color strokeColor;
   final double strokeWidth;
   final bool isHighlighted;
+  final bool isBigCircle;
 
   const _CircleSlice({
     Key? key,
+    this.isBigCircle = false,
     required this.radius,
     required this.fillColor,
     required this.strokeColor,
@@ -41,10 +44,11 @@ class _CircleSlice extends StatelessWidget {
       height: radius,
       child: CustomPaint(
         painter: _CircleSlicePainter(
+          isBigCircle: isBigCircle,
           angle: angle,
           fillColor: fillColor,
           strokeColor: strokeColor,
-          strokeWidth: strokeWidth,
+          strokeWidth: isBigCircle ? 0.5 : 0,
           isHighlighted: isHighlighted,
         ),
       ),
@@ -116,27 +120,33 @@ class _CircleSliceLayout extends StatelessWidget {
         onTertiaryTapCancel: handler?.onTertiaryTapCancel,
         onTertiaryTapDown: handler?.onTertiaryTapDown,
         onTertiaryTapUp: handler?.onTertiaryTapUp,
-        child: ClipPath(
-          clipper: _CircleSliceClipper(slice.angle),
-          child: CustomMultiChildLayout(
-            delegate: _CircleSliceLayoutDelegate(slice.angle),
-            children: [
-              LayoutId(
-                id: _SliceSlot.slice,
-                child: slice,
+        child: slice.isBigCircle
+            ? _buildChild()
+            : ClipPath(
+                clipper: _CircleSliceClipper(slice.angle),
+                child: _buildChild(),
               ),
-              if (child != null)
-                LayoutId(
-                  id: _SliceSlot.child,
-                  child: Transform.rotate(
-                    angle: slice.angle / 2,
-                    child: child,
-                  ),
-                ),
-            ],
-          ),
-        ),
       ),
+    );
+  }
+
+  Widget _buildChild() {
+    return CustomMultiChildLayout(
+      delegate: _CircleSliceLayoutDelegate(slice.angle),
+      children: [
+        LayoutId(
+          id: _SliceSlot.slice,
+          child: slice,
+        ),
+        if (child != null)
+          LayoutId(
+            id: _SliceSlot.child,
+            child: Transform.rotate(
+              angle: slice.angle / 2,
+              child: child,
+            ),
+          ),
+      ],
     );
   }
 }
