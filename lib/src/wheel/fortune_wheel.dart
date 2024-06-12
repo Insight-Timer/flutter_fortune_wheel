@@ -202,6 +202,7 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
   @override
   Widget build(BuildContext context) {
     final selectedIndex = useState<int>(0);
+    var lastFocusedIndex = selectedIndex.value;
     var rotateAnimCtrl = useAnimationController(duration: duration);
 
     final rotateAnim = CurvedAnimation(parent: rotateAnimCtrl, curve: curve);
@@ -218,6 +219,7 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
     }
 
     useEffect(() {
+      // lastFocusedIndex = selectedIndex.value;
       if (animateFirst) animate();
       return null;
     }, []);
@@ -231,8 +233,6 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
     }, []);
 
     final lastVibratedAngle = useRef<double>(0);
-
-    var lastFocusedIndex = selectedIndex.value;
 
     return PanAwareBuilder(
       behavior: HitTestBehavior.opaque,
