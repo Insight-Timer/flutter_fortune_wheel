@@ -351,18 +351,18 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
 
                     if (isBig) {
                       return Container(
-                        color: Colors.orange,
+                        //color: Colors.orange,
                         child: SizedBox.expand(
                           //size: Size(circleSize * 2, circleSize * 2),
                           child: Container(
-                            color: Colors.yellow,
+                            //color: Colors.yellow,
                             child: circleSlicesChild,
                           ),
                         ),
                       );
                     } else {
                       return Container(
-                        color: Colors.lightBlue,
+                        //color: Colors.lightBlue,
                         child: SizedBox.fromSize(
                           size: Size(circleSize, circleSize),
                           child: circleSlicesChild,
