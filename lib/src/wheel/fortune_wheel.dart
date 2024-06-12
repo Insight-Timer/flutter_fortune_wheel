@@ -242,6 +242,7 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
         if (lastFocusedIndex != null) {
           //print("==== UPDATE NEW SELECTED POSITION  -> ${lastFocusedIndex} ");
           selectedIndex.value = lastFocusedIndex;
+          onSelectedValueChanged?.call(selectedIndex.value);
         }
       },
       builder: (context, panState) {
