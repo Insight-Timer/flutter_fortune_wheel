@@ -21,6 +21,7 @@ class FortuneWheelPage extends HookWidget {
       ),
       body: Stack(
         children: [
+          //_wheel(context),
           Container(
             transform: Matrix4.translationValues(
               -(circleSize(context) / 2),

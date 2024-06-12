@@ -173,10 +173,13 @@ class CircularPanPhysics extends PanPhysics {
 
   /// {@macro flutter_fortune_wheel.PanPhysics.handlePanUpdate}
   void handlePanUpdate(DragUpdateDetails details) {
+    final offsetX = size.width / 2;
+    final offsetY = _math.max(size.width, size.height) / 2;
     final center = Offset(
-      size.width / 2,
-      _math.min(size.width, size.height) / 2,
+      offsetX,
+      offsetY,
     );
+
     final onTop = details.localPosition.dy <= center.dy;
     final onLeftSide = details.localPosition.dx <= center.dx;
     final onRightSide = !onLeftSide;

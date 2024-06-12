@@ -29,7 +29,7 @@ class _TransformedCircleSlice extends StatelessWidget {
         child: item.child,
       ),
       slice: _CircleSlice(
-        radius: isBigCircle ? wheelData.radius * 3 : wheelData.radius,
+        radius: isBigCircle ? wheelData.radius : wheelData.radius,
         isBigCircle: isBigCircle,
         angle: wheelData.itemAngle,
         fillColor: style.color,

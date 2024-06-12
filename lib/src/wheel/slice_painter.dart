@@ -30,7 +30,7 @@ class _CircleSlicePainter extends CustomPainter {
             isHighlighted ? radius : radius - 5, angle);
 
     final gradient = LinearGradient(
-      colors: [fillColor, fillColor.withOpacity(0.5)],
+      colors: [fillColor, fillColor.withOpacity(0.75)],
       stops: [0.7, 1.0],
       begin: Alignment.centerLeft,
       end: Alignment.centerRight,

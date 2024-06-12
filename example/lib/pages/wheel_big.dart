@@ -23,21 +23,22 @@ class FortuneWheelBigPage extends HookWidget {
       // ),
       body: Stack(
         children: [
-          Container(
-            transform: Matrix4.translationValues(
-              -(circleSize(context) / 2),
-              250,
-              0,
-            ),
-            child: _wheel(context),
-          ),
+          _wheel(context)
+          // Container(
+          //   transform: Matrix4.translationValues(
+          //     -(circleSize(context) / 2),
+          //     250,
+          //     0,
+          //   ),
+          //   child: _wheel(context),
+          // ),
         ],
       ),
     );
   }
 
   List<Emotions> get emotions {
-    List<Emotions> newEmotions = [];
+    var newEmotions = <Emotions>[];
     for (var element in Constants.feelings) {
       newEmotions.add(
         Emotions(

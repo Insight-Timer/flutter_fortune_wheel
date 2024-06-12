@@ -57,11 +57,15 @@ class _WheelData {
   final BoxConstraints constraints;
   final int itemCount;
   final TextDirection textDirection;
+  final Offset? customOffset;
 
   late final double smallerSide = getSmallerSide(constraints);
   late final double largerSide = getLargerSide(constraints);
   late final double sideDifference = largerSide - smallerSide;
-  late final Offset offset = _calculateWheelOffset(constraints, textDirection);
+  late final calculatedOffset =
+      _calculateWheelOffset(constraints, textDirection);
+  late final Offset offset = customOffset ?? calculatedOffset;
+  //isBig ? bigWheelOffset ?? calculatedOffset : calculatedOffset;
   late final Offset dOffset = Offset(
     (constraints.maxHeight - smallerSide) / 2,
     (constraints.maxWidth - smallerSide) / 2,
@@ -71,6 +75,7 @@ class _WheelData {
   late final double itemAngle = 2 * _math.pi / itemCount;
 
   _WheelData({
+    this.customOffset,
     required this.constraints,
     required this.itemCount,
     required this.textDirection,
@@ -208,6 +213,7 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
       await Future.microtask(() => onAnimationStart?.call());
       await rotateAnimCtrl.forward(from: 0);
       await Future.microtask(() => onAnimationEnd?.call());
+      //print("==== selectedIndex.value -> ${selectedIndex.value}");
       onSelectedValueChanged?.call(selectedIndex.value);
     }
 
@@ -229,12 +235,12 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
     var lastFocusedIndex = selectedIndex.value;
 
     return PanAwareBuilder(
-      behavior: HitTestBehavior.translucent,
+      behavior: HitTestBehavior.opaque,
       physics: physics,
       onFling: onFling,
       onPanChanged: (panState) {
         if (lastFocusedIndex != null) {
-          print("==== UPDATE NEW SELECTED POSITION  -> ${lastFocusedIndex} ");
+          //print("==== UPDATE NEW SELECTED POSITION  -> ${lastFocusedIndex} ");
           selectedIndex.value = lastFocusedIndex;
         }
       },
@@ -251,13 +257,18 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
                   return LayoutBuilder(builder: (context, constraints) {
                     final panDistance = panState.distance;
                     final wheelData = _WheelData(
+                      customOffset: isBig ? Offset(0, size.height / 2) : null,
                       constraints: BoxConstraints(
-                        maxWidth: circleSize,
-                        maxHeight: circleSize,
+                        maxWidth: isBig ? circleSize * 3 : circleSize,
+                        maxHeight: isBig ? circleSize * 3 : circleSize,
                       ),
                       itemCount: items.length,
                       textDirection: Directionality.of(context),
                     );
+
+                    // print("====== wheel Offset -> ${wheelData.offset}");
+                    // print("====== wheel Radius -> ${wheelData.radius}");
+
                     final selectedIndexValue = selectedIndex.value;
 
                     final isAnimatingPanFactor =
@@ -331,14 +342,33 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
                       );
                     }).toList();
 
-                    return SizedBox.expand(
-                      child: _CircleSlices(
-                        isBigCircle: isBig,
-                        items: transformedItems,
-                        wheelData: wheelData,
-                        styleStrategy: styleStrategy,
-                      ),
+                    final circleSlicesChild = _CircleSlices(
+                      isBigCircle: isBig,
+                      items: transformedItems,
+                      wheelData: wheelData,
+                      styleStrategy: styleStrategy,
                     );
+
+                    if (isBig) {
+                      return Container(
+                        color: Colors.orange,
+                        child: SizedBox.expand(
+                          //size: Size(circleSize * 2, circleSize * 2),
+                          child: Container(
+                            color: Colors.yellow,
+                            child: circleSlicesChild,
+                          ),
+                        ),
+                      );
+                    } else {
+                      return Container(
+                        color: Colors.lightBlue,
+                        child: SizedBox.fromSize(
+                          size: Size(circleSize, circleSize),
+                          child: circleSlicesChild,
+                        ),
+                      );
+                    }
                   });
                 }),
             if (indicators.isNotEmpty)
