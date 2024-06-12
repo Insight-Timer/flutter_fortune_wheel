@@ -331,11 +331,11 @@ class PanAwareBuilder extends HookWidget {
         if (!oldValue) {
           returnAnimCtrl.reset();
         } else {
-          print("===== PAN STOPPED -> Move to new position");
+          //print("===== PAN STOPPED -> Move to new position");
           await Future.microtask(() => onPanChanged?.call(panState));
-          print("===== animate begin");
+          //print("===== animate begin");
           await returnAnimCtrl.forward(from: 1); //0.0
-          print("===== animate end");
+          //print("===== animate end");
         }
       },
     );

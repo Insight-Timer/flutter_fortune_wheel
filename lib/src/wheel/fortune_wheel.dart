@@ -155,6 +155,8 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
   /// a section border is crossed.
   final ValueChanged<int>? onFocusItemChanged;
 
+  final ValueChanged<int>? onSelectedValueChanged;
+
   double _getAngle(double progress) {
     return 2 * _math.pi * rotationCount * progress;
   }
@@ -187,13 +189,16 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
     PanPhysics? physics,
     this.onFling,
     this.onFocusItemChanged,
+    this.onSelectedValueChanged,
   })  : physics = physics ?? CircularPanPhysics(),
         assert(items.length > 1),
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final selectedIndex = useState<int>(0);
     var rotateAnimCtrl = useAnimationController(duration: duration);
+
     final rotateAnim = CurvedAnimation(parent: rotateAnimCtrl, curve: curve);
     Future<void> animate() async {
       if (rotateAnimCtrl.isAnimating) {
@@ -203,14 +208,13 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
       await Future.microtask(() => onAnimationStart?.call());
       await rotateAnimCtrl.forward(from: 0);
       await Future.microtask(() => onAnimationEnd?.call());
+      onSelectedValueChanged?.call(selectedIndex.value);
     }
 
     useEffect(() {
       if (animateFirst) animate();
       return null;
     }, []);
-
-    final selectedIndex = useState<int>(0);
 
     useEffect(() {
       final subscription = selected.listen((event) {
@@ -230,7 +234,7 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
       onFling: onFling,
       onPanChanged: (panState) {
         if (lastFocusedIndex != null) {
-          //print("==== UPDATE NEW SELECTED POSITION  -> ${lastFocusedIndex} ");
+          print("==== UPDATE NEW SELECTED POSITION  -> ${lastFocusedIndex} ");
           selectedIndex.value = lastFocusedIndex;
         }
       },

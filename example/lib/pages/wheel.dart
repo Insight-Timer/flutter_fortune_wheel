@@ -54,6 +54,10 @@ class FortuneWheelPage extends HookWidget {
     }
 
     return FortuneWheel(
+      onSelectedValueChanged: (selectionUpdatedIndex) {
+        print(
+            "===== new Selected Index -> " + selectionUpdatedIndex.toString());
+      },
       circleSize: circleSize(context),
       rotationCount: 1,
       curve: FortuneCurve.spin,

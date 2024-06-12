@@ -70,7 +70,7 @@ class FortuneWheelBigPage extends HookWidget {
       // onAnimationEnd: () => isAnimating.value = false,
       onFling: handleRoll,
       onFocusItemChanged: (index) {
-        print("===== $index");
+        //print("===== $index");
         onFocusIndex = index;
       },
       hapticImpact: HapticImpact.heavy,

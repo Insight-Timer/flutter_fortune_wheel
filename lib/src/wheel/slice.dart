@@ -2,7 +2,7 @@ part of 'wheel.dart';
 
 class _CircleSlice extends StatelessWidget {
   static Path buildSlicePath(double radius, double angle) {
-    print("=== radius -> $radius");
+    //print("=== radius -> $radius");
     return Path()
       ..moveTo(0, 0)
       ..lineTo(radius, 0)
