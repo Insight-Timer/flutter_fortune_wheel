@@ -162,6 +162,8 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
 
   final ValueChanged<int>? onSelectedValueChanged;
 
+  final Color? animatedBgColorBigWheel;
+
   double _getAngle(double progress) {
     return 2 * _math.pi * rotationCount * progress;
   }
@@ -179,6 +181,7 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
     Key? key,
     required this.items,
     this.isBig = false,
+    this.animatedBgColorBigWheel,
     this.circleSize = 300.0,
     this.rotationCount = FortuneWidget.kDefaultRotationCount,
     this.selected = const Stream<int>.empty(),
@@ -336,8 +339,19 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
                                         ),
                                       )
                                     : e.style,
-                                isSelected: true)
-                            : e,
+                                isSelected: true,
+                              )
+                            : FortuneItem(
+                                child: e.child,
+                                style: isBig
+                                    ? FortuneItemStyle(
+                                        color: animatedBgColorBigWheel ??
+                                            e.style!.color,
+                                        textStyle: e.style!.textStyle,
+                                      )
+                                    : e.style,
+                                onTap: e.onTap,
+                              ),
                         angle: angle,
                         offset: wheelData.offset,
                       );
