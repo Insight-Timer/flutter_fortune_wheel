@@ -324,34 +324,40 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
                       //   angle: angle,
                       //   offset: wheelData.offset,
                       // );
+                      final halfItemLength = (items.length ~/ 2).toInt();
+                      var otherHalfIndex = lastFocusedIndex >= halfItemLength
+                          ? lastFocusedIndex - halfItemLength
+                          : lastFocusedIndex + halfItemLength;
 
                       return TransformedFortuneItem(
-                        item: lastFocusedIndex /*selectedIndex.value*/ == index
-                            ? FortuneItem(
-                                child: e.child,
-                                style: isBig
-                                    ? FortuneItemStyle(
-                                        color: Colors.white,
-                                        textStyle: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      )
-                                    : e.style,
-                                isSelected: true,
-                              )
-                            : FortuneItem(
-                                child: e.child,
-                                style: isBig
-                                    ? FortuneItemStyle(
-                                        color: animatedBgColorBigWheel ??
-                                            e.style!.color,
-                                        textStyle: e.style!.textStyle,
-                                      )
-                                    : e.style,
-                                onTap: e.onTap,
-                              ),
+                        item:
+                            lastFocusedIndex /*selectedIndex.value*/ == index ||
+                                    otherHalfIndex == index
+                                ? FortuneItem(
+                                    child: e.child,
+                                    style: isBig
+                                        ? FortuneItemStyle(
+                                            color: Colors.white,
+                                            textStyle: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 17,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          )
+                                        : e.style,
+                                    isSelected: true,
+                                  )
+                                : FortuneItem(
+                                    child: e.child,
+                                    style: isBig
+                                        ? FortuneItemStyle(
+                                            color: animatedBgColorBigWheel ??
+                                                e.style!.color,
+                                            textStyle: e.style!.textStyle,
+                                          )
+                                        : e.style,
+                                    onTap: e.onTap,
+                                  ),
                         angle: angle,
                         offset: wheelData.offset,
                       );

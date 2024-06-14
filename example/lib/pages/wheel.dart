@@ -19,28 +19,13 @@ class FortuneWheelPage extends HookWidget {
       appBar: AppBar(
         title: Text('Fortune Wheel Demo'),
       ),
-      body: Stack(
-        children: [
-          //_wheel(context),
-          Container(
-            transform: Matrix4.translationValues(
-              -(circleSize(context) / 2),
-              200,
-              0,
-            ),
-            child: _wheel(context),
-          ),
-          /*Positioned(
-            top: 200 + (circleSize(context) / 2),
-            child: Transform.rotate(
-              alignment: Alignment.topLeft,
-              angle: -0.22,
-              child: CustomPaint(
-                painter: PeacefulSlicePainter(),
-              ),
-            ),
-          ),*/
-        ],
+      body: Container(
+        transform: Matrix4.translationValues(
+          0, //-(circleSize(context) / 2),
+          200,
+          0,
+        ),
+        child: _wheel(context),
       ),
     );
   }

@@ -30,10 +30,10 @@ class Constants {
     Emotions(name: 'Angry', color: Color(0xFFF94144)),
     Emotions(name: 'Fearful', color: Color(0xFFF37226)),
     Emotions(name: 'Surprised', color: Color(0xFFF8961E)),
-    Emotions(name: 'Happ4', color: Color(0xFFF9C747)),
-    Emotions(name: 'Peaceful5', color: Color(0xFFF90BE6D)),
-    Emotions(name: 'Bad6', color: Color(0xFF43AA8B)),
-    Emotions(name: 'Sad7', color: Color(0xFF577590)),
+    Emotions(name: 'Happ', color: Color(0xFFF9C747)),
+    Emotions(name: 'Peaceful', color: Color(0xFFF90BE6D)),
+    Emotions(name: 'Bad', color: Color(0xFF43AA8B)),
+    Emotions(name: 'Sad', color: Color(0xFF577590)),
   ];
 
   static List<Emotions> emotions = _emotions + _emotions;
