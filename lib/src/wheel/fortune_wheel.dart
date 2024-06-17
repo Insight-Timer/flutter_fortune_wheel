@@ -165,8 +165,10 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
   final Color? animatedBgColorBigWheel;
 
   double _getAngle(double progress) {
-    return 2 * _math.pi * rotationCount * progress;
+    return (2 * _math.pi * rotationCount * progress);
   }
+
+  var lastSelectedAngle = 0.0;
 
   /// {@template flutter_fortune_wheel.FortuneWheel}
   /// Creates a new [FortuneWheel] with the given [items], which is centered
@@ -208,7 +210,9 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
     var lastFocusedIndex = selectedIndex.value;
     var rotateAnimCtrl = useAnimationController(duration: duration);
 
-    final rotateAnim = CurvedAnimation(parent: rotateAnimCtrl, curve: curve);
+    final rotateAnim =
+        CurvedAnimation(parent: rotateAnimCtrl, curve: FortuneCurve.spin);
+
     Future<void> animate() async {
       if (rotateAnimCtrl.isAnimating) {
         return;
@@ -282,8 +286,16 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
                     final panAngle =
                         panDistance * panFactor * isAnimatingPanFactor;
                     //Made the angle value /2 - to make rotation round smaller and should rotate to next coming value.
-                    final rotationAngle = _getAngle(rotateAnim.value / 2);
-                    final totalAngle = selectedAngle + panAngle + rotationAngle;
+                    print(
+                        "======== lastSelectedAngle -> $lastSelectedAngle  ======= selectedAngle -> $selectedAngle");
+
+                    var rotationAngle = _getAngle(rotateAnim.value);
+                    // rotationAngle = rotationAngle < 5.0 ? 5.0 : rotationAngle;
+                    final totalAngle =
+                        (selectedAngle + panAngle) + rotationAngle;
+
+                    print(
+                        "===== rotationAngle -> $rotationAngle ---- totalAngle -> $totalAngle ---- rotationAnim -> ${rotateAnim.value}");
 
                     final focusedIndex = _vibrateIfBorderCrossed(
                       totalAngle,
@@ -308,56 +320,51 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
                       final angle = totalAngle +
                           alignmentOffset +
                           _calculateSliceAngle(index, items.length);
-                      // print(
-                      //     "===== index ${index} ${(items[index].child as Text).data} - Angle -> $angle    ");
 
-                      // return TransformedFortuneItem(
-                      //   item: FortuneItem(
-                      //       child: Text(
-                      //         angle.toString(),
-                      //       ),
-                      //       style: FortuneItemStyle(
-                      //         color: e.style!.color,
-                      //         textStyle: TextStyle(fontSize: 12),
-                      //       ),
-                      //       onTap: e.onTap),
-                      //   angle: angle,
-                      //   offset: wheelData.offset,
-                      // );
-                      final halfItemLength = (items.length ~/ 2).toInt();
-                      var otherHalfIndex = lastFocusedIndex >= halfItemLength
-                          ? lastFocusedIndex - halfItemLength
-                          : lastFocusedIndex + halfItemLength;
+                      // final halfItemLength = (items.length ~/ 2).toInt();
+                      // var otherHalfIndex = lastFocusedIndex >= halfItemLength
+                      //     ? lastFocusedIndex - halfItemLength
+                      //     : lastFocusedIndex + halfItemLength;
 
                       return TransformedFortuneItem(
-                        item:
-                            lastFocusedIndex /*selectedIndex.value*/ == index ||
-                                    otherHalfIndex == index
-                                ? FortuneItem(
-                                    child: e.child,
-                                    style: isBig
-                                        ? FortuneItemStyle(
-                                            color: Colors.white,
-                                            textStyle: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 17,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          )
-                                        : e.style,
-                                    isSelected: true,
-                                  )
-                                : FortuneItem(
-                                    child: e.child,
-                                    style: isBig
-                                        ? FortuneItemStyle(
-                                            color: animatedBgColorBigWheel ??
-                                                e.style!.color,
-                                            textStyle: e.style!.textStyle,
-                                          )
-                                        : e.style,
-                                    onTap: e.onTap,
-                                  ),
+                        item: lastFocusedIndex ==
+                                index /* ||
+                                    otherHalfIndex == index*/
+                            ? FortuneItem(
+                                child: e.child,
+                                style: isBig
+                                    ? FortuneItemStyle(
+                                        color: Colors.white,
+                                        textStyle: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      )
+                                    : e.style,
+                                isSelected: true,
+                              )
+                            : FortuneItem(
+                                child: Text(
+                                    " ${selectedAngle.toStringAsFixed(2)} - ${rotationAngle.toStringAsFixed(2)} = ${totalAngle.toStringAsFixed(2)}"), //  e.child,
+                                style: isBig
+                                    ? FortuneItemStyle(
+                                        color: animatedBgColorBigWheel ??
+                                            e.style!.color,
+                                        textStyle: e.style!.textStyle,
+                                      )
+                                    : e.style,
+                                onTap: () {
+                                  lastSelectedAngle = selectedAngle;
+                                  print(
+                                      "================================================================================================");
+                                  print(
+                                      "==============================lastSelectedAngle -> $lastSelectedAngle ================================= ");
+                                  print(
+                                      "================================================================================================");
+                                  e.onTap?.call();
+                                },
+                              ),
                         angle: angle,
                         offset: wheelData.offset,
                       );
@@ -372,18 +379,14 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
 
                     if (isBig) {
                       return Container(
-                        //color: Colors.orange,
                         child: SizedBox.expand(
-                          //size: Size(circleSize * 2, circleSize * 2),
                           child: Container(
-                            //color: Colors.yellow,
                             child: circleSlicesChild,
                           ),
                         ),
                       );
                     } else {
                       return Container(
-                        //color: Colors.lightBlue,
                         child: SizedBox.fromSize(
                           size: Size(circleSize, circleSize),
                           child: circleSlicesChild,
@@ -403,13 +406,6 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
                   ),
                 ),
               ),
-            // for (var it in indicators)
-            //   IgnorePointer(
-            //     child: _WheelIndicator(
-            //       indicator: it,
-            //       size: circleSize,
-            //     ),
-            //   ),
           ],
         );
       },
